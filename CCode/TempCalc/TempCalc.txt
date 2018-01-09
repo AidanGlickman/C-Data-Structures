@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <string.h>
+
+#define fFreeze 32
+#define fBoil 212
+
+double f_to_c(double f){
+	return (f - 32) * (5/9);
+}
+	
+int main(){
+	int i;
+	printf("%10s%10s", "Fahrenheit", "Celsius");
+	for(i=fFreeze; i<=fBoil; i += 10){
+		printf("%10i%10.1g", i, f_to_c(i));
+	}
+		

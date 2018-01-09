@@ -1,0 +1,87 @@
+;
+; Vars
+;
+define x	$02
+define y	$08
+
+
+;
+; Addresses
+;
+define temp_addr	$0001
+
+;
+; Main
+;
+main:
+	LDA #x ; Loads the value x in to the accumulator
+	PHA ; Pushing accumulator to stack	
+	
+	LDA #y
+	PHA
+	
+	JSR b ; Going to subroutine 'b'
+	
+
+;
+; a(x) = 2x + 3
+;
+a:
+	TSX ; Transfers from the stack pointer to Index X
+	TXA ; Transfers from Index X to the accumulator
+	CLC ; Clears the Carry Bit, so that last addition doesn't add to this one.
+	ADC #$03 ; Adds 3 to the accumulator
+	TAY ; Transfers accumulator to Index Y
+	LDA $0100, Y ; Loads the accumulator with the parameter
+	STA temp_addr
+	CLC
+	ADC temp_addr ; accumulator now holds 2x
+	ADC #$03 ; now accumulator holds 2x + 3
+	STA $0100, Y
+	RTS
+	
+	
+;
+; b(x,y) = a(x+2) + a(3y)
+;
+b:
+	TSX
+	TXA
+	CLC
+	ADC #$04
+	TAY
+	LDA $0100, Y
+	ADC #$02
+	
+	PHA 
+	JSR a
+	
+	TSX
+	TXA
+	CLC
+	ADC #$04
+	TAY
+	LDA $0100, Y
+	
+	STA temp_addr ;Store y in memory
+	CLC
+	ADC temp_addr
+	ADC temp_addr
+	
+	PHA
+	JSR a
+	PLA
+	STA temp_addr
+	PLA
+	ADC temp_addr
+	STA temp_addr
+	
+	TSX ; Transfers from the stack pointer to Index X
+	TXA ; Transfers from Index X to the accumulator
+	CLC ; Clears the Carry Bit, so that last addition doesn't add to this one.
+	ADC #$03 ; Adds 3 to the accumulator
+	TAY ; Transfers accumulator to Index Y
+	
+	LDA temp_addr
+	STA $0100, Y
+	RTS

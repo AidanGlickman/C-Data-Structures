@@ -1,0 +1,22 @@
+#define MAXSIZE 10
+
+int array[MAXSIZE];
+int pos = 0;
+int total = 0;
+
+int addNumber (int num) {
+  if (pos >= MAXSIZE) {
+    return -1;
+  }
+  
+  array[pos++] = num;
+  total += num;
+  return 0;
+}
+
+void printNumbers()
+{
+  int i;
+  printf ("The numbers are: ");
+
+  

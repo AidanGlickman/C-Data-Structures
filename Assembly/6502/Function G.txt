@@ -1,0 +1,85 @@
+﻿; Hannah Ahn
+; Aidan Glickman
+; Gregory Latronica
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Constant values
+;
+define n $03
+; Input "n" parameter
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Addresses
+;
+define ans_addr $01
+define temp_addr $02
+; Final answer will be stored at $0001.
+; Temporary values can be stored at $0002.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Main Program
+; -- Push n then y onto the stack
+; -- Call function e
+; -- The pop the result from the stack and store it in ans_addr
+LDA #n
+PHA
+JSR g
+PLA ; get result
+STA ans_addr
+BRK
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; G(n) = 2 (G(n-1) + n)
+; G(0) = 3
+;
+g:
+        TSX
+        TXA
+        CLC
+        ADC #$03
+        TAY
+        LDA $0100, Y  ;Loads n into accumulator
+
+
+        BEQ base ;If n = 0 go to base case
+
+
+        SEC
+        SBC #$01
+        PHA
+        JSR g
+        PLA ;finds g(n-1)and puts into accumulator
+        
+STA temp_addr ; stores g(n-1) into temp_addr
+        
+        
+        TSX
+        TXA
+        CLC 
+        ADC #$03
+        TAY
+        LDA $0100, Y ; loads n into accumulator
+        CLC
+        ADC temp_addr; calculates g(n-1) + n
+
+
+        STA temp_addr
+        CLC
+        ADC temp_addr ; multiplies g(n-1) + n by 2
+        
+JMP merged_code
+        
+
+
+base:
+        LDA #$03 ; sets g(0) = 3
+
+
+merged_code:
+        STA temp_addr
+        TSX
+        TXA
+        CLC
+        ADC #$03
+        TAY
+        LDA temp_addr
+        STA $0100, Y ; stores answer on the stack :-)
+
+
+        RTS ; return from subroutine
