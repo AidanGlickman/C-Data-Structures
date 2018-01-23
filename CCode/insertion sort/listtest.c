@@ -15,7 +15,7 @@ int main()
   ilAppend (list1, 6);
   ilAppend (list1, 12);
   ilAppend (list1, 2);
-  ilAppend (list1, 19);  
+  ilAppend (list1, 19);
   ilAppend (list1, -7);
   ilPrint (list1);
 
@@ -24,7 +24,7 @@ int main()
   ilInsertSorted (list2, 6);
   ilInsertSorted (list2, 12);
   ilInsertSorted (list2, 2);
-  ilInsertSorted (list2, 19);  
+  ilInsertSorted (list2, 19);
   ilInsertSorted (list2, -7);
   ilPrint (list2);
 

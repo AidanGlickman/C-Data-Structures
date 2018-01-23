@@ -130,23 +130,37 @@ void ilPrint (IntList *il)
 
 void ilInsertSorted (IntList *il, int val)
 {
-  int i, pos=ilSize(il);
-  if(pos>=il->listSize || pos<0){
-    return INT_MIN;
-  }
-  if(il->listSize>=il->arraySize){
-    ilExpand(il);
-  }
-  for(i=il->listSize;i>pos;i--){
+  int i, done=0;
 
-    il->list[i]=il->list[i-1];
+  if(ilSize(il)==0){
+    ilAppend(il, val);
+    done = 1;
   }
-  il->list[pos]=val;
-  il->listSize++;
-    return 0;
+
+  for(i=0; i<il->listSize; i++){
+    if(val<il->list[i]){
+      ilInsert(il, i, val);
+      done = 1;
+      break;
+    }
+  }
+  if(done==0)
+    ilAppend(il, val);
 }
 
 IntList* ilSort (IntList *il)
 {
-	/* Implement */
+  int i;
+
+  IntList* nil = malloc(sizeof(IntList));
+  nil->listSize = 0;
+  nil->arraySize = il->arraySize;
+  nil->list = malloc(sizeof(int)*nil->arraySize);
+
+  for(i=0;i<il->listSize;i++){
+    ilInsertSorted(nil,il->list[i]);
+    printf("inserted %d\n", il->list[i]);
+  }
+
+  return nil;
 }

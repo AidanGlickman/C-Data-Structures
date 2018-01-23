@@ -30,17 +30,17 @@ IntList* ilCopy(IntList *il)
 {
   IntList *cl = malloc (sizeof (IntList));
   Node *n;
-  
+
   cl->head = NULL;
   cl->tail = NULL;
   cl->listSize = 0;
-  
+
   n = il->head;
   while (n != NULL) {
 	ilAppend(cl, n->val);
 	n = n->next;
-  }		
-  
+  }
+
   return cl;
 }
 
@@ -78,7 +78,7 @@ int ilFind (IntList *il, int val)
   while (n != NULL) {
     if (n->val == val)
       return i;
-    
+
     i++;
     n = n->next;
   }
@@ -102,7 +102,7 @@ int ilInsert (IntList *il, int pos, int val)
 
   newNode = malloc (sizeof(Node));
   newNode->val = val;
-  
+
   if (pos == 0) {
     newNode->next = il->head;
     il->head = newNode;
@@ -141,7 +141,7 @@ int ilDelete (IntList *il, int pos)
   Node* n;
   Node* del;
   int i;
-  
+
   if ((pos < 0) || (pos >= il->listSize))
     return INT_MIN;
 
@@ -156,7 +156,7 @@ int ilDelete (IntList *il, int pos)
     il->head = il->head->next;
     il->listSize--;
   }
-  else {  
+  else {
   n = il->head;
 
   for (i=0; i<pos-1; i++)
@@ -189,10 +189,39 @@ void ilPrint (IntList *il)
 
 void ilInsertSorted (IntList *il, int val)
 {
-	/* Implement */
+  int i=0, done=0;
+
+  if(il->head == NULL){
+    ilAppend(il, val);
+    done = 1;
+  }
+
+    Node* tnode = il->head;
+
+  while(tnode->next != NULL && done == 0){
+    if(val<tnode->val){
+      ilInsert(il, i, val);
+      done = 1;
+    }
+    i++;
+    tnode = tnode->next;
+  }
+
+  if(done==0){
+    ilAppend(il, val);
+  }
 }
 
 IntList* ilSort (IntList *il)
 {
-	/* Implement */
+  Node* tnode = il->head;
+	IntList* nil = malloc(sizeof(IntList));
+
+  while(tnode != NULL){
+    ilInsertSorted(nil,tnode->val);
+    tnode = tnode->next;
+  }
+
+  return nil;
+
 }
