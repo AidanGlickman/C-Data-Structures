@@ -60,10 +60,12 @@ public class Ex13_6 {
   public static int hexToDecimal(String hex) {
     int decimalValue = 0;
     for (int i = 0; i < hex.length(); i++) {
-      char hexChar = hex.charAt(i);
+      char hexChar = Character.toUpperCase(hex.charAt(i));
+      if(!((hexChar >= 'A' && hexChar <= 'F') || (hexChar >= '0' && hexChar <= '9')))
+          throw new NumberFormatException();
       decimalValue = decimalValue * 16 + hexCharToDecimal(hexChar);
     }
-    
+
     return decimalValue;
   }
 
